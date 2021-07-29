@@ -35,5 +35,28 @@ function mouseDragged() {
 }
 
 function draw() {
+    noStroke();
+    fill(r, g, b);
+    square(0, 0, 50);
+}
 
+function keyPressed() {
+    if (keyCode === 82) {
+        console.log("red");
+        r = 255;
+        g = 0;
+        b = 0;
+    }
+    if (keyCode === 66) {
+        console.log("blue");
+        r = 0;
+        g = 0;
+        b = 255;
+    }
+    if (keyCode === 71) {
+        console.log("green");
+        r = 0;
+        g = 255;
+        b = 0;
+    }
 }
