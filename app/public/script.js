@@ -1,25 +1,27 @@
+const paletteSize = 50;
 
 var socket;
+
 let h;
 let palette;
 
 function setup() {
     createCanvas(700, 500);
-    background(51);
     colorMode(HSB, 360, 100, 100);
+    background(50, 5, 100);
     socket = io.connect('http://localhost:3000');
     socket.on('mouse', newDrawing);
     h = 0;
     palette = [];
 
-    for (let i = 0; i < width / 50; i++) {
-        let newHue = i * (360 / (width / 50));
-        let newColor = new pigment(newHue, i * 50, height - 50, i);
+    for (let i = 0; i < width / paletteSize; i++) {
+        let newHue = i * (360 / (width / paletteSize));
+        let newColor = new pigment(newHue, i * paletteSize, height - paletteSize, i);
         console.log(`Added Hue: ${newHue}`);
         palette.push(newColor);
     }
 
-    console.log(palette);
+    //console.log(palette);
 }
 
 class pigment {
@@ -38,11 +40,11 @@ class pigment {
 function draw() {
     noStroke();
     fill(h, 100, 100);
-    square(0, 0, 50);
+    square(0, 0, paletteSize);
 
     for (let hue of palette) {
         fill(hue.h, 100, 100);
-        square(hue.x, hue.y, 50);
+        square(hue.x, hue.y, paletteSize);
     }
 }
 
@@ -70,17 +72,13 @@ function mouseDragged() {
 function doubleClicked() {
     console.log("clicked");
     for (let hue of palette) {
-        if ((mouseX > hue.x && mouseX < hue.x + 50) && (mouseY > height - 50)) {
+        if ((mouseX > hue.x && mouseX < hue.x + paletteSize) && (mouseY > height - paletteSize)) {
             hue.setHue();
             console.log('Changed to color ID: ' + hue.id + '; Hue: ' + hue.h);
             break;
         }
     }
 }
-
-// function setHue(hue) {
-//     h = hue;
-// }
 
 // function keyPressed() {
 //     if (keyCode === 82) {
