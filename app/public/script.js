@@ -1,5 +1,6 @@
 var socket;
 let h;
+let palette;
 
 function setup() {
     createCanvas(600, 400);
@@ -8,16 +9,39 @@ function setup() {
     socket = io.connect('http://localhost:3000');
     socket.on('mouse', newDrawing);
     h = 0;
+    palette = [];
+
+    for (let i = 0; i < width / 50; i++) {
+        let newHue = i * (360 / (width / 50));
+        let newColor = new pigment(newHue, i * 50, height - 50);
+        console.log(`Added Hue: ${newHue}`);
+        palette.push(newColor);
+    }
+
+    //console.log(palette);
 }
 
-// class pigment {
+class pigment {
+    constructor(h, x, y) {
+        this.h = h;
+        this.x = x;
+        this.y = y;
+    }
 
-// }
+    setHue() {
+        h = this.h;
+    }
+}
 
 function draw() {
     noStroke();
     fill(h, 100, 100);
     square(0, 0, 50);
+
+    for (let hue of palette) {
+        fill(hue.h, 100, 100);
+        square(hue.x, hue.y, 50);
+    }
 }
 
 function newDrawing(data) {
